@@ -46,19 +46,20 @@ def calc_word_num(myList):
 ferdowsiWordNum = calc_word_num(ferdowsiList)
 hafezWordNum = calc_word_num(hafezList)
 molaviWordNum = calc_word_num(molaviList)
+wordNumList = [ferdowsiWordNum,hafezWordNum,molaviWordNum]
 #function below calculates unigram for each word and saves them in dictionary
-def unigram(myList):
+def unigram(myList,index):
     myDict = {}
     for i in myList:
         for j in i.split():
             if j not in myDict:
-                myDict[j] = calculate_occurance(myList, j)/ferdowsiWordNum
+                myDict[j] = calculate_occurance(myList, j)/ wordNumList[index]
     return myDict
 #filling ferdowsi and hafez and molavi unigram dictionaries with correct values
-ferdowsiUnigramDict = unigram(ferdowsiList)
-hafezUnigramDict = unigram(hafezList)
-molaviUnigramDict = unigram(molaviList)
-#this function calculates number of occurance of specific two words
+ferdowsiUnigramDict = unigram(ferdowsiList,0)
+hafezUnigramDict = unigram(hafezList,1)
+molaviUnigramDict = unigram(molaviList,2)
+#this function calculates number of occurance of specific two consecutive words
 def calculate_occurance_volume2(myList,sentence):
     res = 0
     for i in myList:
@@ -76,8 +77,8 @@ def bigram(myList,unigramDict,wordNum):
                     myDict[tmp[i]] = (unigramDict[tmp[i]]*wordNum)/len(myList)
                 else:
                     myDict[tmp[i]+' '+tmp[i+1]] = calculate_occurance_volume2(myList, tmp[i]+' '+tmp[i+1])/(unigramDict[tmp[i]]*wordNum)
-    #we didnt calculate this in our loops:)
-    myDict[tmp[0]+' '+tmp[1]] = calculate_occurance_volume2(myList, tmp[0]+' '+tmp[1])/(unigramDict[tmp[0]]*wordNum)            
+        #we didnt calculate this in our loops
+        myDict[tmp[0]+' '+tmp[1]] = calculate_occurance_volume2(myList, tmp[0]+' '+tmp[1])/(unigramDict[tmp[0]]*wordNum)            
     return myDict
 #filling bugram dict for ferdowsi and hafez and molavi
 ferdowsiBigramDict = bigram(ferdowsiList, ferdowsiUnigramDict, ferdowsiWordNum)
